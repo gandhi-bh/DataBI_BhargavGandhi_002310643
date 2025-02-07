@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "ParquetSource",
+						"type": "DelimitedTextSource",
 						"additionalColumns": [
 							{
 								"name": "di_job_id",
@@ -42,17 +42,11 @@
 						],
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"recursive": false,
+							"recursive": true,
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
-							"type": "ParquetReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SnowflakeV2Sink",
-						"importSettings": {
-							"type": "SnowflakeImportCopyCommand"
+							"type": "DelimitedTextReadSettings"
 						}
 					},
 					"enableStaging": true,
@@ -63,15 +57,21 @@
 						},
 						"path": "silver"
 					}
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					}
+				]
 			},
 			{
 				"name": "TSV_2_Parquet",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
+					"timeout": "0.00:30:00",
+					"retry": 1,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -89,15 +89,6 @@
 							"type": "DelimitedTextReadSettings"
 						}
 					},
-					"sink": {
-						"type": "ParquetSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "ParquetWriteSettings"
-						}
-					},
 					"enableStaging": false,
 					"logSettings": {
 						"enableCopyActivityLog": true,
@@ -112,7 +103,13 @@
 							}
 						}
 					}
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {
