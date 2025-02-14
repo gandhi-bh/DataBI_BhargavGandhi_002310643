@@ -1,0 +1,66 @@
+{
+	"name": "NYPD_Pipeline_ArrestData",
+	"properties": {
+		"activities": [
+			{
+				"name": "CSV_2_Snowflake",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:30:00",
+					"retry": 1,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "AzureBlobStorage_LS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "silver"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText5",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SnowflakeTable4",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"variables": {
+			"myFileName": {
+				"type": "String",
+				"defaultValue": "NYDP_ALTERYX_OUTPUT"
+			}
+		},
+		"annotations": []
+	}
+}
