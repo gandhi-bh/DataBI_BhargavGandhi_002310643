@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "damg7370spring2025adf"
 		},
+		"Snowflake_LS_NYPD_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'Snowflake_LS_NYPD'"
+		},
 		"ls_snowflake_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_snowflake'"
@@ -22,6 +26,14 @@
 		"AzureKeyVault_LS_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://damg7370kvstg2025.vault.azure.net/"
+		},
+		"Snowflake_LS_NYPD_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "NYPD_DB_ARREST"
+		},
+		"Snowflake_LS_NYPD_properties_typeProperties_role": {
+			"type": "string",
+			"defaultValue": "NYPD_ROLE"
 		},
 		"ls_snowflake_properties_typeProperties_database": {
 			"type": "string",
@@ -58,6 +70,9 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"Snowflake_LS_NYPD_password": {
+						"value": "[parameters('Snowflake_LS_NYPD_password')]"
+					},
 					"ls_snowflake_password": {
 						"value": "[parameters('ls_snowflake_password')]"
 					},
@@ -70,6 +85,12 @@
 					"AzureKeyVault_LS_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault_LS_properties_typeProperties_baseUrl')]"
 					},
+					"Snowflake_LS_NYPD_properties_typeProperties_database": {
+						"value": "[parameters('Snowflake_LS_NYPD_properties_typeProperties_database')]"
+					},
+					"Snowflake_LS_NYPD_properties_typeProperties_role": {
+						"value": "[parameters('Snowflake_LS_NYPD_properties_typeProperties_role')]"
+					},
 					"ls_snowflake_properties_typeProperties_database": {
 						"value": "[parameters('ls_snowflake_properties_typeProperties_database')]"
 					},
@@ -79,6 +100,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "damg7370spring2025adf_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'damg7370spring2025adf_ArmTemplate_0')]"
+			]
 		}
 	]
 }
