@@ -2,15 +2,15 @@
 	"name": "SnowflakeTable5",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Snowflake_Seattle",
+			"referenceName": "ls_snowflake",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "SnowflakeV2Table",
 		"schema": [],
 		"typeProperties": {
-			"schema": "SEATTLE_PET_LICENSE_SCHEMA",
-			"table": "SEATTLE_PET_TABLE"
+			"schema": "SEATTLE_PET_LIC_SCHEMA",
+			"table": "SEATTLE_PET_TBL"
 		}
 	}
 }
