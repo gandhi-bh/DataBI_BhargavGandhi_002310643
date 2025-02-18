@@ -10,7 +10,7 @@
 						"type": "DatasetReference"
 					},
 					"name": "readTSVFile",
-					"description": "Import data from SEATTLE_PET_TABLE"
+					"description": "Import data from SEATTLE_PET_TBL"
 				},
 				{
 					"name": "BreedDimMaxId",
@@ -30,7 +30,7 @@
 			"transformations": [
 				{
 					"name": "SourceDataSK",
-					"description": "Custom Cross join on 'sourceStg' and 'BreedDimMaxId'"
+					"description": "Custom Cross join on readTSVFile and 'BreedDimMaxId'"
 				},
 				{
 					"name": "aggregateBreedKeys",
@@ -56,8 +56,20 @@
 				"parameters{",
 				"     DI_JOB_ID as string (\"59\")",
 				"}",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          LICENSE_ISSUE_DATE as date,",
+				"          LICENSE_NUMBER as string,",
+				"          ANIMAL_NAME as string,",
+				"          SPECIES as string,",
+				"          PRIMARY_BREED as string,",
+				"          SECONDARY_BREED as string,",
+				"          ZIP_CODE as string,",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     limit: 100,",
 				"     format: 'table') ~> readTSVFile",
 				"source(output(",
 				"          MAXBREEDSK as decimal(10,0)",
