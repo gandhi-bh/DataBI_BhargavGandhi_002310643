@@ -11,6 +11,9 @@
 		"ls_snowflake_password": {
 			"value": ""
 		},
+		"Snowflake_Seattle_password": {
+			"value": ""
+		},
 		"AzureBlobStorage_LS_sasUri": {
 			"value": ""
 		},
@@ -31,6 +34,12 @@
 		},
 		"ls_snowflake_properties_typeProperties_role": {
 			"value": "TEMP_ROLE"
+		},
+		"Snowflake_Seattle_properties_typeProperties_database": {
+			"value": "SEATTLE_PET_LICENSE_DB"
+		},
+		"Snowflake_Seattle_properties_typeProperties_role": {
+			"value": "SEATTLE_PET_LICENSE_ROLE"
 		},
 		"containerUri": {
 			"value": ""
