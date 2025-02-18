@@ -13,16 +13,28 @@
 					"description": "Import data from SEATTLE_PET_TBL"
 				},
 				{
+					"dataset": {
+						"referenceName": "SnowflakeTable6",
+						"type": "DatasetReference"
+					},
 					"name": "BreedDimMaxId",
 					"description": "Import Data from Breed Dim"
 				},
 				{
+					"dataset": {
+						"referenceName": "SnowflakeTable6",
+						"type": "DatasetReference"
+					},
 					"name": "sourceBreedDim",
 					"description": "Import Data from ds_Demo_SCHEMA_BREED_DIM"
 				}
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "SnowflakeTable6",
+						"type": "DatasetReference"
+					},
 					"name": "sinkBreedDim",
 					"description": "Export Data to SEATTLE_SCHEMA_BREED_DIM"
 				}
@@ -75,24 +87,27 @@
 				"          MAXBREEDSK as decimal(10,0)",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> BreedDimMaxId",
+				"     validateSchema: false,",
+				"     query: 'SELECT NVL(MAX(BREED_SK),0) as MaxBreedSK FROM SEATTLE_PET_LIC_SCHEMA.BREED_DIM\\n ',",
+				"     format: 'query') ~> BreedDimMaxId",
 				"source(output(",
-				"          BREED_SK as string,",
+				"          BREED_SK as decimal(10,0),",
 				"          PRIMARY_BREED_NAME as string,",
 				"          SECONDARY_BREED_NAME as string,",
 				"          SPECIES_NAME as string,",
 				"          DI_JOB_ID as string,",
-				"          DI_LOAD_DT as string",
+				"          DI_LOAD_DT as date",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> sourceBreedDim",
+				"     validateSchema: false,",
+				"     format: 'table') ~> sourceBreedDim",
 				"readTSVFile, BreedDimMaxId join(1==1,",
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> SourceDataSK",
-				"SourceDataSK aggregate(groupBy(SPECIES = Species,",
-				"          PRIMARY_BREED = Primary_Breed,",
+				"SourceDataSK aggregate(groupBy(SPECIES,",
+				"          PRIMARY_BREED,",
 				"          SECONDARY_BREED,",
 				"          MAXBREEDSK),",
 				"     COUNT_ROW = count(LICENSE_NUMBER)) ~> aggregateBreedKeys",
@@ -112,6 +127,11 @@
 				"          DI_JOB_ID = $DI_JOB_ID) ~> DerivedColumns",
 				"DerivedColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     mapColumn(",
@@ -121,8 +141,7 @@
 				"          SPECIES_NAME = SPECIES,",
 				"          DI_JOB_ID,",
 				"          DI_LOAD_DT",
-				"     ),",
-				"     format: 'table') ~> sinkBreedDim"
+				"     )) ~> sinkBreedDim"
 			]
 		}
 	}

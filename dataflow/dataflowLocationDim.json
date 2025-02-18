@@ -1,27 +1,69 @@
 {
-	"name": "dataflow1",
+	"name": "dataflowLocationDim",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText_SPL",
+						"referenceName": "DelimitedText_Geo",
 						"type": "DatasetReference"
 					},
-					"name": "readTSVFile",
-					"description": "Import data from ds_DelimitedText"
+					"name": "source1"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeTable_Geo",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
 			"scriptLines": [
-				"parameters{",
-				"     JOB_ID_Param as string (\"10\")",
-				"}",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          state_fips as short,",
+				"          state as string,",
+				"          state_abbr as string,",
+				"          zipcode as string,",
+				"          county as string,",
+				"          city as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> readTSVFile"
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 keyGenerate(output(SK_ID as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 derive(DI_LOAD_DT = currentTimestamp(),",
+				"          DI_JOB_ID = uuid()) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          LOCATION_SK = SK_ID,",
+				"          ZIP_CODE = zipcode,",
+				"          CITY = city,",
+				"          STATE = state,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT",
+				"     )) ~> sink1"
 			]
 		}
 	}
