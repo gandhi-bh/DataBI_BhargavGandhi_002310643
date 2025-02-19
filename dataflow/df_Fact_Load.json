@@ -43,7 +43,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable10",
+						"referenceName": "SnowflakeTable13",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -169,17 +169,6 @@
 				"surrogateKey1 derive(PET_LIC_SK = PET_LIC_SK + ROW_NUM) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          LICENSE_ISSUE_DATE as string,",
-				"          LICENSE_NUMBER as string,",
-				"          ANIMAL_NAME as string,",
-				"          SPECIES as string,",
-				"          PRIMARY_BREED as string,",
-				"          SECONDARY_BREED as string,",
-				"          ZIP_CODE as string,",
-				"          DI_JOB_ID as string,",
-				"          DI_LOAD_DT as string",
-				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
@@ -190,7 +179,13 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     stageInsert: true,",
 				"     mapColumn(",
-				"          DI_JOB_ID",
+				"          LOCATION_SK,",
+				"          BREED_SK,",
+				"          PET_LIC_SK,",
+				"          DATE_SK,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT,",
+				"          ROW_NUM",
 				"     )) ~> sink1"
 			]
 		}
