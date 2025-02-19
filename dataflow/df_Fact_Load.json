@@ -34,7 +34,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable_FCT",
+						"referenceName": "SnowflakeTable12",
 						"type": "DatasetReference"
 					},
 					"name": "FactMaxID"
@@ -43,7 +43,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable_FCT",
+						"referenceName": "SnowflakeTable10",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -74,15 +74,15 @@
 			],
 			"scriptLines": [
 				"source(output(",
-				"          Species as string,",
-				"          Primary_Breed as string,",
-				"          Secondary_Breed as string,",
-				"          ZIP_Code as string,",
-				"          LIC_ISSUE_DATE as date,",
-				"          LIC_Number as decimal(38,0),",
-				"          Animal_NAME as string,",
-				"          Load_Date as date,",
-				"          Job_ID as string",
+				"          LICENSE_ISSUE_DATE as date,",
+				"          LICENSE_NUMBER as string,",
+				"          ANIMAL_NAME as string,",
+				"          SPECIES as string,",
+				"          PRIMARY_BREED as string,",
+				"          SECONDARY_BREED as string,",
+				"          ZIP_CODE as string,",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as date",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -131,19 +131,19 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     query: 'SELECT NVL(MAX(PET_LIC_SK),0) AS MAX_LIC FROM SEATTLE_PET_LICENSE_SCHEMA.PET_LIC_FCT',",
+				"     query: 'SELECT NVL(MAX(PET_LIC_SK),0) AS MAX_LIC FROM SEATTLE_PET_LIC_SCHEMA.PET_LIC_FCT',",
 				"     format: 'query') ~> FactMaxID",
-				"source1, sourceLocDim join(source1@ZIP_Code == sourceLocDim@ZIP_CODE,",
+				"source1, sourceLocDim join(source1@ZIP_CODE == sourceLocDim@ZIP_CODE,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> joinLocDim",
-				"joinLocDim, sourceBreedDim join(Primary_Breed == PRIMARY_BREED_NAME,",
+				"joinLocDim, sourceBreedDim join(PRIMARY_BREED == PRIMARY_BREED_NAME,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> joinBreedDim",
-				"joinBreedDim, sourceDateDim join(Load_Date == sourceDateDim@DI_LOAD_DT,",
+				"joinBreedDim, sourceDateDim join(source1@DI_LOAD_DT == sourceDateDim@DI_LOAD_DT,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
@@ -169,6 +169,17 @@
 				"surrogateKey1 derive(PET_LIC_SK = PET_LIC_SK + ROW_NUM) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          LICENSE_ISSUE_DATE as string,",
+				"          LICENSE_NUMBER as string,",
+				"          ANIMAL_NAME as string,",
+				"          SPECIES as string,",
+				"          PRIMARY_BREED as string,",
+				"          SECONDARY_BREED as string,",
+				"          ZIP_CODE as string,",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as string",
+				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
@@ -179,12 +190,7 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     stageInsert: true,",
 				"     mapColumn(",
-				"          LOCATION_SK,",
-				"          BREED_SK,",
-				"          PET_LIC_SK,",
-				"          DATE_SK,",
-				"          DI_JOB_ID,",
-				"          DI_LOAD_DT",
+				"          DI_JOB_ID",
 				"     )) ~> sink1"
 			]
 		}
