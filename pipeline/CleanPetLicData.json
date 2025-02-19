@@ -15,16 +15,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "DF_Clean_Data_from_TSV",
-						"type": "DataFlowReference",
-						"parameters": {
-							"JOB_ID_Param": {
-								"value": "@pipeline().RunId",
-								"type": "Expression"
-							}
-						}
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
