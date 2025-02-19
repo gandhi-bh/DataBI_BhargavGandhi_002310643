@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable7",
+						"referenceName": "SnowflakeTable14",
 						"type": "DatasetReference"
 					},
 					"name": "sourceLocDim"
@@ -87,15 +87,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> source1",
-				"source(output(",
-				"          LOCATION_SK as decimal(10,0),",
-				"          ZIP_CODE as string,",
-				"          CITY as string,",
-				"          STATE as string,",
-				"          DI_JOB_ID as string,",
-				"          DI_LOAD_DT as date",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> sourceLocDim",
 				"source(output(",
