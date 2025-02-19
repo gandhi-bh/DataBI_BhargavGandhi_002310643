@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable_Geo",
+						"referenceName": "SnowflakeTable7",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -62,7 +62,8 @@
 				"          CITY = city,",
 				"          STATE = state,",
 				"          DI_JOB_ID,",
-				"          DI_LOAD_DT",
+				"          DI_LOAD_DT,",
+				"          state_abbr",
 				"     )) ~> sink1"
 			]
 		}

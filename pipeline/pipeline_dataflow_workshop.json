@@ -5,6 +5,8 @@
 			{
 				"name": "CleanPetLicData",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -17,13 +19,7 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "DF_Clean_Data_From_TSV",
-						"type": "DataFlowReference",
-						"parameters": {
-							"JOB_ID_Param": {
-								"value": "'@{pipeline().RunId}'",
-								"type": "Expression"
-							}
-						}
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,
@@ -35,6 +31,8 @@
 			{
 				"name": "LoadBreedDim",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "CleanPetLicData",
@@ -103,6 +101,8 @@
 			{
 				"name": "LoadFact",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "LoadLocationDim",
