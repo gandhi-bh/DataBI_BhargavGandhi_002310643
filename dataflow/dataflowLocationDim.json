@@ -6,27 +6,27 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText_Geo",
+						"referenceName": "DelimitedText7",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "source2"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SnowflakeTable7",
+						"referenceName": "SnowflakeTable14",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink2"
 				}
 			],
 			"transformations": [
 				{
-					"name": "surrogateKey1"
+					"name": "surrogateKey2"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "derivedColumn2"
 				}
 			],
 			"scriptLines": [
@@ -40,31 +40,30 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 keyGenerate(output(SK_ID as long),",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source2 keyGenerate(output(SK_ID as long),",
 				"     startAt: 1L,",
-				"     stepValue: 1L) ~> surrogateKey1",
-				"surrogateKey1 derive(DI_LOAD_DT = currentTimestamp(),",
-				"          DI_JOB_ID = uuid()) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     stepValue: 1L) ~> surrogateKey2",
+				"surrogateKey2 derive(DI_JOB_ID = uuid(),",
+				"          DI_LOAD_DT = currentTimestamp()) ~> derivedColumn2",
+				"derivedColumn2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
 				"     stageInsert: true,",
 				"     mapColumn(",
-				"          LOCATION_SK = SK_ID,",
+				"          STATE = state,",
+				"          STATE_ABBR = state_abbr,",
 				"          ZIP_CODE = zipcode,",
 				"          CITY = city,",
-				"          STATE = state,",
+				"          LOCATION_SK = SK_ID,",
 				"          DI_JOB_ID,",
-				"          DI_LOAD_DT,",
-				"          state_abbr",
-				"     )) ~> sink1"
+				"          DI_LOAD_DT",
+				"     )) ~> sink2"
 			]
 		}
 	}
