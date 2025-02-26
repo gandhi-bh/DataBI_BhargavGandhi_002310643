@@ -183,7 +183,7 @@
 				"     stageInsert: true,",
 				"     mapColumn(",
 				"          PET_LIC_SK,",
-				"          DATE_SK = DATE_DIM_SK,",
+				"          DATE_DIM_SK,",
 				"          LOCATION_SK,",
 				"          BREED_SK,",
 				"          DI_JOB_ID,",
