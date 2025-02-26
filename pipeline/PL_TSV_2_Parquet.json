@@ -78,18 +78,8 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SnowflakeTable1",
-						"type": "DatasetReference",
-						"parameters": {
-							"schema_name": {
-								"value": "@pipeline().parameters.schema_name",
-								"type": "Expression"
-							},
-							"table_name": {
-								"value": "@pipeline().parameters.table_name",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "SnowflakeTableTemPDB",
+						"type": "DatasetReference"
 					}
 				]
 			},
